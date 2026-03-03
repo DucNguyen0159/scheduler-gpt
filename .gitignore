@@ -1,0 +1,29 @@
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+*.exe
+
+# Cargo (if you add it later)
+Cargo.lock
+Cargo.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs (keep .out files for comparison, but ignore generated ones if needed)
+# Uncomment if you want to ignore generated .out files:
+# *.out
+
+# Backup files
+*.backup
+*.bak
+*.expected_out_backup/
