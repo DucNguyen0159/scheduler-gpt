@@ -48,13 +48,31 @@ fn main() {
     // Keep the usage string exactly as the assignment PDF specifies (even though it's Rust).
     // Some graders check exact text.
     let args: Vec<String> = env::args().collect();
-    if args.len() != 2 {
+
+    if args.len() < 2 || args.len() > 3 {
         println!("Usage: scheduler-get.py <input file>");
         return;
     }
 
-    let input_path = &args[1];
-    let (cfg, mut procs) = match parse_input(input_path) {
+    let mut color = false;
+    let mut input_path: Option<String> = None;
+
+    for a in args.iter().skip(1) {
+        if a == "--color" {
+            color = true;
+        } else {
+            input_path = Some(a.clone());
+        }
+    }
+
+    let input_path = match input_path {
+        Some(p) => p,
+        None => {
+            println!("Usage: scheduler-get.py <input file>");
+            return;
+        }
+    };
+    let (cfg, mut procs) = match parse_input(&input_path) {
         Ok(v) => v,
         Err(msg) => {
             println!("{}", msg);
@@ -62,7 +80,7 @@ fn main() {
         }
     };
 
-    let out_path = make_out_path(input_path);
+    let out_path = make_out_path(&input_path);
 
     let mut lines: Vec<String> = Vec::new();
     lines.push(format!("{:>3} processes", cfg.process_count));
@@ -95,6 +113,13 @@ fn main() {
 
     if let Err(e) = fs::write(&out_path, lines.join("\n") + "\n") {
         eprintln!("Error writing output: {}", e);
+    }
+
+    // Print colored output to terminal if --color flag is used
+    if color {
+        for l in &lines {
+            println!("{}", colorize_line(l));
+        }
     }
 }
 
@@ -471,6 +496,72 @@ fn run_rr(cfg: &Config, procs: &mut [Process], quantum: i32) -> Vec<String> {
     }
 
     out
+}
+
+// ANSI color code helpers
+fn ansi_wrap(s: &str, code: &str) -> String {
+    format!("\x1b[{}m{}\x1b[0m", code, s)
+}
+
+// Basic color palette
+fn blue(s: &str) -> String {
+    ansi_wrap(s, "34")
+}
+
+fn green(s: &str) -> String {
+    ansi_wrap(s, "32")
+}
+
+fn red(s: &str) -> String {
+    ansi_wrap(s, "31")
+}
+
+fn yellow(s: &str) -> String {
+    ansi_wrap(s, "33")
+}
+
+fn cyan(s: &str) -> String {
+    ansi_wrap(s, "36")
+}
+
+fn bold(s: &str) -> String {
+    ansi_wrap(s, "1")
+}
+
+fn colorize_line(line: &str) -> String {
+    // Keep grading output plain in the file.
+    // This ONLY affects terminal printing when --color is used.
+
+    if line.starts_with("Time") {
+        if line.contains(" arrived") {
+            return blue(line);
+        }
+        if line.contains(" selected ") {
+            return green(line);
+        }
+        if line.contains(" finished") {
+            return red(line);
+        }
+        if line.contains("Idle") {
+            return yellow(line);
+        }
+        return line.to_string();
+    }
+
+    // Headers / summary styling (optional but looks nice)
+    if line.ends_with(" processes") {
+        return bold(line);
+    }
+    if line.starts_with("Using ") || line.starts_with("Quantum") || line.starts_with("Finished at time") {
+        return cyan(line);
+    }
+
+    // Metrics + did not finish
+    if line.contains(" did not finish") {
+        return red(line);
+    }
+
+    line.to_string()
 }
 
 fn build_summary(procs: &[Process]) -> Vec<String> {

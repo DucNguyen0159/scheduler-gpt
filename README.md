@@ -9,6 +9,7 @@ A Rust implementation of three process scheduling algorithms: **First-Come First
 - ✅ **Round Robin**: Time-sliced scheduling with configurable quantum
 - ✅ Calculates turnaround time, wait time, and response time for each process
 - ✅ Handles edge cases: idle CPU, unfinished processes, simultaneous arrivals
+- 🎨 **Colored Terminal Output** (Bonus): ANSI color-coded output for better visualization (optional `--color` flag)
 
 ## Requirements
 
@@ -26,17 +27,47 @@ This will create `scheduler-gpt.exe` (Windows) or `scheduler-gpt` (Linux/Mac).
 
 ## Usage
 
+### Basic Usage (Plain Output)
+
 ```bash
 ./scheduler-gpt.exe <input_file.in>
 ```
 
 The program will generate an output file with the same base name and `.out` extension.
 
-### Example
+### Colored Output (Bonus Feature)
+
+For enhanced terminal visualization, use the `--color` flag:
 
 ```bash
+./scheduler-gpt.exe --color <input_file.in>
+```
+
+This will:
+- Still generate the plain `.out` file (for grading)
+- Additionally print colored output to the terminal
+
+**Color Mapping:**
+- 🔵 **Blue**: Process arrivals
+- 🟢 **Green**: Process selections
+- 🔴 **Red**: Process finishes
+- 🟡 **Yellow**: Idle periods
+- 🔷 **Cyan**: Headers and summary information
+
+**Terminal Compatibility:**
+- ✅ Works in: Windows Terminal, PowerShell 7+, regular PowerShell
+- ⚠️ Limited support in: PowerShell 5.1 Admin mode (colors may not display, but feature is implemented)
+
+### Examples
+
+```bash
+# Plain output (for grading)
 ./scheduler-gpt.exe c2-fcfs.in
 # Generates: c2-fcfs.out
+
+# Colored terminal output + plain file
+./scheduler-gpt.exe --color c2-fcfs.in
+# Generates: c2-fcfs.out (plain) + colored terminal output
 ```
 
 ## Input File Format
@@ -130,6 +161,21 @@ The program handles:
 
 All errors follow the format: `Error: <description>`
 
+## Bonus Features
+
+### Colored Output
+
+The program includes an optional colored output feature using ANSI escape codes. This feature:
+- Separates presentation (terminal) from artifact output (`.out` files)
+- Grading files remain unchanged (plain text)
+- Only activates with the `--color` flag
+- Works in terminals that support ANSI escape codes
+
+**Implementation Notes:**
+- Colors are applied only to terminal output, not to file output
+- The `.out` files are always written in plain text format for grading
+- Terminal compatibility varies by environment (see Usage section)
+
 ## License
 
 This project is part of UCF COP4600 coursework.
@@ -137,6 +183,7 @@ This project is part of UCF COP4600 coursework.
 ## Authors
 
 Henry Nguyen
+[Other Author's Name]
 ---
 
 **Note**: This implementation was developed with AI assistance as part of a course assignment exploring AI-assisted programming.
