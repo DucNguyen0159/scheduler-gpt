@@ -49,25 +49,31 @@ fn main() {
     // Some graders check exact text.
     let args: Vec<String> = env::args().collect();
 
-    if args.len() < 2 || args.len() > 3 {
-        println!("Usage: scheduler-get.py <input file>");
-        return;
-    }
-
-    let mut color = false;
-    let mut input_path: Option<String> = None;
-
-    for a in args.iter().skip(1) {
-        if a == "--color" {
-            color = true;
-        } else {
-            input_path = Some(a.clone());
+    // Allowed forms:
+    //   program <input file>
+    //   program --color <input file>
+    //   program <input file> --color
+    //
+    // Anything else must print the required usage message and exit.
+    let (input_path, color) = match args.len() {
+        2 => {
+            if args[1] == "--color" {
+                println!("Usage: scheduler-get.py <input file>");
+                return;
+            }
+            (args[1].clone(), false)
         }
-    }
-
-    let input_path = match input_path {
-        Some(p) => p,
-        None => {
+        3 => {
+            if args[1] == "--color" && args[2] != "--color" {
+                (args[2].clone(), true)
+            } else if args[2] == "--color" && args[1] != "--color" {
+                (args[1].clone(), true)
+            } else {
+                println!("Usage: scheduler-get.py <input file>");
+                return;
+            }
+        }
+        _ => {
             println!("Usage: scheduler-get.py <input file>");
             return;
         }
