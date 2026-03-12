@@ -116,8 +116,6 @@ This will:
 - Compare generated outputs with expected `.out` files
 - Report pass/fail for each test case
 
-```
-
 ## Test Files
 
 The repository includes test cases:
@@ -183,7 +181,7 @@ This project is part of UCF COP4600 coursework.
 ## Authors
 
 Henry Nguyen
-[Other Author's Name]
+Minh Thien Pham
 ---
 
 **Note**: This implementation was developed with AI assistance as part of a course assignment exploring AI-assisted programming.
