@@ -1,0 +1,4 @@
+processcount 1
+runfor 10
+process name A arrival 0 burst 5
+end

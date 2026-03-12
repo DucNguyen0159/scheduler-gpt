@@ -1,0 +1,5 @@
+processcount 1
+runfor 10
+use fcfs
+process name A burst 5
+end

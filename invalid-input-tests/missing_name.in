@@ -1,0 +1,5 @@
+processcount 1
+runfor 10
+use fcfs
+process arrival 0 burst 5
+end
