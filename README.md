@@ -182,6 +182,5 @@ This project is part of UCF COP4600 coursework.
 
 Henry Nguyen
 Minh Thien Pham
----
 
-**Note**: This implementation was developed with AI assistance as part of a course assignment exploring AI-assisted programming.
+> **Note**: This implementation was developed with AI assistance as part of a course assignment exploring AI-assisted programming.
