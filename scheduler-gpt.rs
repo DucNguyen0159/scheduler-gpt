@@ -58,7 +58,7 @@ fn main() {
     let (input_path, color) = match args.len() {
         2 => {
             if args[1] == "--color" {
-                println!("Usage: scheduler-get.py <input file>");
+                println!("Usage: scheduler-get.rs <input file>");
                 return;
             }
             (args[1].clone(), false)
@@ -69,12 +69,12 @@ fn main() {
             } else if args[2] == "--color" && args[1] != "--color" {
                 (args[1].clone(), true)
             } else {
-                println!("Usage: scheduler-get.py <input file>");
+                println!("Usage: scheduler-get.rs <input file>");
                 return;
             }
         }
         _ => {
-            println!("Usage: scheduler-get.py <input file>");
+            println!("Usage: scheduler-get.rs <input file>");
             return;
         }
     };
